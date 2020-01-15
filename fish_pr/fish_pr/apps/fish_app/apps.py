@@ -1,0 +1,6 @@
+from django.apps import AppConfig
+
+
+class FishAppConfig(AppConfig):
+    name = 'fish_app'
+    verbose_name = 'Рыболовные места'

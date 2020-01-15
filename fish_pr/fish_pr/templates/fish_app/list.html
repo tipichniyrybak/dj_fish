@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %} Liostr {% endblock %}
+
+{% block content %}
+    {% if places %}
+        {% for p in places %}
+            <p><a href="{% url 'fish_app:detail' p.id %}">{{ p.name }}</a></p>
+        {% endfor %}
+    {% else %}
+        Места не найдены
+    {% endif %}
+{% endblock %}

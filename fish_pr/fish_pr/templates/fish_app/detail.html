@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ place.name }} {% endblock %}
+
+{% block content %}
+    <h2>{{ place.name }}</h2>
+    <p>{{ place.lant }}   {{ place.long }}</p>
+    <p>{{ place.description }}</p>
+    <em>{{ place.photos }}</em>
+    <hr>
+
+    <hr>
+
+    <form action="{% url 'fish_app:leave_comment' place.id %}" method="POST">
+        <input type="text" required placeholder=""
+    </form>
+
+{% endblock %}
