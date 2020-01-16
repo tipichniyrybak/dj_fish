@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'fish_app',
+    'workspace',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
