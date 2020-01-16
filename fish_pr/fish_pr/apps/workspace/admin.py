@@ -1,3 +1,7 @@
+
 from django.contrib import admin
 
-# Register your models here.
+from .models import FishingPlace, Order
+
+admin.site.register(FishingPlace)
+admin.site.register(Order)
