@@ -5,7 +5,7 @@ from django.urls import reverse
 
 def index(request):
     places = FishingPlace.objects.order_by('-id')
-    return render(request, 'workspace/list.html', {'places': places})
+    return render(request, 'workspace/index.html', {'places': places})
 
 def detail(request, place_id):
     try:
