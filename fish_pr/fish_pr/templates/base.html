@@ -1,43 +1,18 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/workspace_style.css' %}">
-    <title> {% block title %} My fishing site {% endblock %} </title>
-  </head>
-  <body>
-      <div class="container">
-          <div class="header"> HEADER </div>
-          <div class="controls">
-              <input type="button" id="openAddPlaseFormID" value="Add place" name="Add place">
-          </div>
-          <div class="map" id="divmapID">
-             <div id="map" style="margin:auto; width: 100%; height: 100%"></div>
-          </div>
-          <div class="content" id="divcontentID">
-              <div id="base_name">
-                  ...Base Name...
-              </div>  <br>
-              <div id="coord">
-                  <div id="lant">00.00000</div>
-                  <br>
-                  <div id="long">00.00000</div>
-              </div>  <br>
-              <div id="photos">
-                  <!-- <img style='imgm' src='./content/fishing_places/333/32834799.jpg' alt='Forest'> -->
-              </div>  <br>
-              <div id="decription">
-                  Decription Text
-              </div>  <br>
-              <div id="orders">
-                  /Orders list/
-              </div>
-          </div>
-          <div class="footer">
-          </div>
-      </div>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/workspace_style.css' %}">
+        <title> {% block title %} My fishing site {% endblock %} </title>
+    </head>
+    <body>
+        <div class="grid-container">
+            <div class="header">
+            <div class="work_area"></div>
+            <div class="footer"></div>
+            </div>
+    </div>
   </body>
 </html>
