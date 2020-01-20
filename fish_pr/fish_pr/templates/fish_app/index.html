@@ -1,6 +1,5 @@
 {% extends 'fish_app/base.html' %}
 
-
 {% block css_link %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/workspace_style.css' %}">
@@ -24,8 +23,6 @@
             myYandexMap.set_places();
             console.log('1 map:  ');
             console.log(myYandexMap);
-
-
         });
     </script>
 {% endblock %}
@@ -44,7 +41,7 @@
         </div>
         <div class="place_content" id="divcontentID">
             <div id="base_name">
-                ...Base Name...
+                ...Place Name...
             </div>  <br>
             <div id="coord">
                 <div id="lant">00.00000</div>

@@ -21,24 +21,24 @@ class YandexMap {
 
             type: 'POST',
             success: function(response) {
-                var json_resp = jQuery.parseJSON(response)
-
-                console.log('json_resp:');
-                console.log(json_resp);
+                // var json_resp = jQuery.parseJSON(response)
+                //
+                // console.log('json_resp:');
+                // console.log(json_resp);
                 // $(".content").html(json_resp[0][1]);
-                $("#base_name").html('<b>Place name:</b> ' + json_resp[0][1]);
-                $("#lant").html('<b>Place lant:</b> ' + json_resp[0][2]);
-                $("#long").html('<b>Place long:</b> ' + json_resp[0][3]);
-                $("#decription").html('<b>Place description:</b> ' + json_resp[0][4]);
+                $("#base_name").html('<b>Place name:</b> ' + response['name']);
+                $("#lant").html('<b>Place lant:</b> ' + response['lant']);
+                $("#long").html('<b>Place long:</b> ' + response['long']);
+                $("#decription").html('<b>Place description:</b> ' + response['description']);
 
                 console.log('photos str:  ');
-                console.log(json_resp[0][5]);
-                var photo_names = json_resp[0][5].split('|');
+                console.log(response['photos']);
+                var photo_names = response['photos'].split('|');
                 console.log('photo_names:  ');
                 console.log(photo_names);
                 var photosHTML = '<b>Place photos:</b> <br> ';
-                photo_names.forEach(function(element) {
-                    photosHTML = photosHTML + '<img src="/static/img/tmp_places_photo/' + element + '" />';
+                photo_names.forEach(function(photo_name) {
+                    photosHTML = photosHTML + '<img src="/static/img/tmp_places_photo/' + photo_name + '" />';
                 });
 
                 $("#photos").html(photosHTML);
@@ -52,21 +52,23 @@ class YandexMap {
 
     set_places() {
         var that = this;
+        console.log('__set_places:');
         $.ajax({
             type: "POST",
-            url: "/get_places",
-
+            url: "/get_places/",
             type: 'POST',
             success: function(response) {
-                var json_resp = jQuery.parseJSON(response)
-
-                console.log('json_resp:');
-                console.log(json_resp);
+                console.log('response:  ');
+                console.log(response);
+                // var json_resp = jQuery.parseJSON(response)
+                //
+                // console.log('json_resp:');
+                // console.log(json_resp);
                 ymaps.ready(function () {
-                    json_resp.forEach(function(element) {
-                        console.log(element[1]);
-                        var myPlacemark1 = new ymaps.Placemark([element[2], element[3]], {
-                            iconContent: element[1]
+                    response.forEach(function(place) {
+                        console.log(place['name']);
+                        var myPlacemark1 = new ymaps.Placemark([place['lant'], place['long']], {
+                            iconContent: place['name']
                         }, {
                             preset: 'islands#darkOrangeStretchyIcon'
                         });
@@ -74,7 +76,7 @@ class YandexMap {
                             console.log('click cluck');
 //                            document.getElementByID("divcontentID").innerHTML = element[1];
 
-                            that.get_place_info(element[0]);
+                            that.get_place_info(place['id']);
 
                         });
                         that.PlacemarkArray.push(myPlacemark1);
