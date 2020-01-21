@@ -20,9 +20,11 @@ def get_places(request):
 def get_place_info(request):
     place_id = request.POST.get("place_id")
     print ('place_id = ', place_id)
-    place = FishingPlace.objects.values('id', 'name', 'lant', 'long', 'description', 'photos').get(id=place_id)
+    place = FishingPlace.objects.values('id', 'name', 'lant', 'long', 'description', 'photos')
+    p = FishingPlace.objects.get(id=place_id)
+    # print (place.lant)
 
-    return JsonResponse(list(place), safe=False)
+    return JsonResponse(list(p), safe=False)
 
 
 

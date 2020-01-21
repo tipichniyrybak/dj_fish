@@ -17,15 +17,15 @@ class YandexMap {
     get_place_info(place_id) {
         $.ajax({
             type: "POST",
-            url: "/get_place_info?place_id=" + place_id,
+            url: "/get_place_info/",
+            data: {
+                'place_id': place_id // from form
+            },
 
             type: 'POST',
             success: function(response) {
-                // var json_resp = jQuery.parseJSON(response)
-                //
-                // console.log('json_resp:');
-                // console.log(json_resp);
-                // $(".content").html(json_resp[0][1]);
+                console.log('response2:  ');
+                console.log(response);
                 $("#base_name").html('<b>Place name:</b> ' + response['name']);
                 $("#lant").html('<b>Place lant:</b> ' + response['lant']);
                 $("#long").html('<b>Place long:</b> ' + response['long']);
@@ -44,7 +44,7 @@ class YandexMap {
                 $("#photos").html(photosHTML);
             },
             error: function(error) {
-                console.log('error:');
+                console.log('get_place_info_error:');
                 console.log(error);
             }
         });
