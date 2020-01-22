@@ -26,14 +26,15 @@ class YandexMap {
             success: function(response) {
                 console.log('response2:  ');
                 console.log(response);
-                $("#base_name").html('<b>Place name:</b> ' + response['name']);
-                $("#lant").html('<b>Place lant:</b> ' + response['lant']);
-                $("#long").html('<b>Place long:</b> ' + response['long']);
-                $("#decription").html('<b>Place description:</b> ' + response['description']);
+
+                $("#base_name").html('<b>Place name:</b> ' + response[0]['name']);
+                $("#lant").html('<b>Place lant:</b> ' + response[0]['lant']);
+                $("#long").html('<b>Place long:</b> ' + response[0]['long']);
+                $("#decription").html('<b>Place description:</b> ' + response[0]['description']);
 
                 console.log('photos str:  ');
-                console.log(response['photos']);
-                var photo_names = response['photos'].split('|');
+                console.log(response[0]['photos']);
+                var photo_names = response[0]['photos'].split('|');
                 console.log('photo_names:  ');
                 console.log(photo_names);
                 var photosHTML = '<b>Place photos:</b> <br> ';
