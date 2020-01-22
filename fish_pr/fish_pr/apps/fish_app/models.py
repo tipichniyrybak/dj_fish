@@ -14,6 +14,14 @@ class FishingPlace(models.Model):
         verbose_name = 'Рыболовное место'
         verbose_name_plural = 'Рыболовные места'
 
+    def save(self, *args, **kwargs):
+        if FishingPlace.objects.filter(name=self.name).exists():
+            print('Place name already exists!')
+            return 0
+        else:
+            super(FishingPlace, self).save(*args, **kwargs)
+            return FishingPlace.objects.filter(name=self.name).values('id')
+
 
 class Order(models.Model):
     fishing_place = models.ForeignKey(FishingPlace, on_delete=models.CASCADE)

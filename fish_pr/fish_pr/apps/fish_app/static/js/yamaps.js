@@ -19,7 +19,7 @@ class YandexMap {
             type: "POST",
             url: "/get_place_info/",
             data: {
-                'place_id': place_id // from form
+                'place_id': place_id 
             },
 
             type: 'POST',
