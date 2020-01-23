@@ -9,6 +9,7 @@ from django.forms.models import model_to_dict
 from ftplib import FTP
 from werkzeug.utils import secure_filename
 import os
+from django.core.files.storage import default_storage
 
 
 def index(request):
@@ -42,6 +43,7 @@ def add_place(request):
         ftp.cwd(FTP_path)
 
         for photo in request.files.getlist('files[]'):
+            file_name = default_storage.save(photo.name, photo)
             filename = secure_filename(photo.filename)
             file_path = os.path.join(static, 'img/tmp_places_photo' + filename)
             photo.save(file_path)
