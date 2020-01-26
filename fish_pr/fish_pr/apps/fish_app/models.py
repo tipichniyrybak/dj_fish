@@ -20,7 +20,8 @@ class FishingPlace(models.Model):
             return 0
         else:
             super(FishingPlace, self).save(*args, **kwargs)
-            return FishingPlace.objects.filter(name=self.name).values('id')
+            # return FishingPlace.objects.filter(name=self.name).values('id')
+            return self.id
 
 
 class Order(models.Model):

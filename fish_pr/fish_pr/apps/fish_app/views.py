@@ -31,7 +31,7 @@ def get_place_info(request):
 def add_place(request):
     data = request.POST.copy()
 
-    place = FishingPlace(name= data.get('place_name'), lant=  data.get('place_lant'), long=  data.get('place_long'), description=  data.get('place_description'), photos=  data.get('place_photos'))
+    place = FishingPlace(name=data.get('place_name'), lant=data.get('place_lant'), long=data.get('place_long'), description=data.get('place_description'), photos=data.get('place_photos'))
     id = place.save()
     if id != 0:
         ftp = FTP()
