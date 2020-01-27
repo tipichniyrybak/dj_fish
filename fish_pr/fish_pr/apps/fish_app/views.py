@@ -29,8 +29,8 @@ def get_place_info(request):
 
 @csrf_exempt
 def add_place(request):
-    data = request.POST.copy()
-
+    data = request.POST.get('place_name')
+    files = request.files.getlist
     place = FishingPlace(name=data.get('place_name'), lant=data.get('place_lant'), long=data.get('place_long'), description=data.get('place_description'), photos=data.get('place_photos'))
     id = place.save()
     if id != 0:

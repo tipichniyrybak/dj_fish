@@ -51,6 +51,7 @@
                 console.log($('form').get(0));
                 formData = new FormData();
 
+
                 console.log($('#place_nameID').val());
 
                 formData.append('place_name', $('#place_nameID').val());
@@ -71,14 +72,15 @@
                 $.ajax({
                     url: '/add_place/',
                     type: 'POST',
-                    data:{
-                        place_name: $('#place_nameID').val(),
-                        place_lant: $('#lantID').val(),
-                        place_long: $('#longID').val(),
-                        place_description: $('#descriptionID').val(),
-                        place_photos:pPhotos,
-                        files: files,
-                    },
+                    // data:{
+                    //     place_name: $('#place_nameID').val(),
+                    //     place_lant: $('#lantID').val(),
+                    //     place_long: $('#longID').val(),
+                    //     place_description: $('#descriptionID').val(),
+                    //     place_photos:pPhotos,
+                    //     files: files,
+                    // },
+                    data: formData,
                     processData: false,
                     contentType: false,
 
@@ -146,7 +148,7 @@
               <h2>Add place</h2>
             </div>
         <div class="modal-body">
-            <form enctype="multipart/form-data" method="post" name="add_plase_form" id="add_plase_formID" role="form">
+            <form enctype="multipart/form-data" method="post" name="add_plase_form" id="add_plase_formID" role="form" data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
                 <p>Название базы: <input type="text" id="place_nameID" name="place_name" /></p>
                 <p>lant: <input type="text" id="lantID" name="lant"/></p>
                 <p>long: <input type="text" id="longID" name="long"/></p>
