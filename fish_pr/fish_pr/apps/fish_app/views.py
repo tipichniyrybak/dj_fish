@@ -10,6 +10,7 @@ from ftplib import FTP
 from werkzeug.utils import secure_filename
 import os
 from django.core.files.storage import default_storage
+from django.core.files.storage import FileSystemStorage
 
 
 def index(request):
@@ -29,8 +30,8 @@ def get_place_info(request):
 
 @csrf_exempt
 def add_place(request):
-    data = request.POST.get('place_name')
-    files = request.files.getlist
+    data = request.POST
+    photos = request.FILES.getlist('files[]')
     place = FishingPlace(name=data.get('place_name'), lant=data.get('place_lant'), long=data.get('place_long'), description=data.get('place_description'), photos=data.get('place_photos'))
     id = place.save()
     if id != 0:
@@ -42,15 +43,24 @@ def add_place(request):
             ftp.mkd(FTP_path)
         ftp.cwd(FTP_path)
 
-        for photo in request.files.getlist('files[]'):
-            file_name = default_storage.save(photo.name, photo)
-            filename = secure_filename(photo.filename)
-            file_path = os.path.join(static, 'img/tmp_places_photo' + filename)
-            photo.save(file_path)
-            fp = open(file_path, 'rb')
-            ftp.storbinary('STOR %s' % os.path.basename(filename), fp, 1024)
-            os.remove(file_path)
-            fp.close()
+        fs = FileSystemStorage(location=MEDIA_URL)
+        for photo in photos:
+            filename = fs.save(photo.name, photo)
+
+
+            # filename = secure_filename(photo.filename)
+            # file_path = os.path.join(MEDIA_URL, 'img', filename)
+            # photo.save(file_path)
+
+
+            # file_name = default_storage.save(photo.name, photo)
+            # filename = secure_filename(photo.filename)
+            # file_path = os.path.join(static, 'img/tmp_places_photo' + filename)
+            # photo.save(file_path)
+            # fp = open(file_path, 'rb')
+            # ftp.storbinary('STOR %s' % os.path.basename(filename), fp, 1024)
+            # os.remove(file_path)
+            # fp.close()
 
     return JsonResponse(id, safe=False)
 

@@ -23,6 +23,11 @@
             myYandexMap.set_places();
             console.log('1 map:  ');
             console.log(myYandexMap);
+            $(document).ajaxSend(function (event, jqxhr, settings) {
+                jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            });
+
+
 
             $('#openAddPlaseFormID').click(function(e){
                 e.preventDefault();
@@ -50,8 +55,6 @@
                 var pPhotos ='';
                 console.log($('form').get(0));
                 formData = new FormData();
-
-
                 console.log($('#place_nameID').val());
 
                 formData.append('place_name', $('#place_nameID').val());
