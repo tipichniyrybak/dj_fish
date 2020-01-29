@@ -151,7 +151,8 @@
               <h2>Add place</h2>
             </div>
         <div class="modal-body">
-            <form enctype="multipart/form-data" method="post" name="add_plase_form" id="add_plase_formID" role="form" data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+            <form enctype="multipart/form-data" method="post" name="add_plase_form" id="add_plase_formID" role="form">
+                {% csrf_token %}
                 <p>Название базы: <input type="text" id="place_nameID" name="place_name" /></p>
                 <p>lant: <input type="text" id="lantID" name="lant"/></p>
                 <p>long: <input type="text" id="longID" name="long"/></p>

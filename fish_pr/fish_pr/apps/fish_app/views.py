@@ -10,7 +10,9 @@ from ftplib import FTP
 from werkzeug.utils import secure_filename
 import os
 from django.core.files.storage import default_storage
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import FileSystemStorage, default_storage
+from django.conf import settings
+from django.templatetags.static import static
 
 
 def index(request):
@@ -43,25 +45,15 @@ def add_place(request):
             ftp.mkd(FTP_path)
         ftp.cwd(FTP_path)
 
-        fs = FileSystemStorage(location=MEDIA_URL)
+        photo_path = os.path.join(settings.BASE_DIR, 'fish_pr', 'static', 'tmp_img', str(id))
+        fs = FileSystemStorage()
         for photo in photos:
-            filename = fs.save(photo.name, photo)
-
-
-            # filename = secure_filename(photo.filename)
-            # file_path = os.path.join(MEDIA_URL, 'img', filename)
-            # photo.save(file_path)
-
-
-            # file_name = default_storage.save(photo.name, photo)
-            # filename = secure_filename(photo.filename)
-            # file_path = os.path.join(static, 'img/tmp_places_photo' + filename)
-            # photo.save(file_path)
-            # fp = open(file_path, 'rb')
-            # ftp.storbinary('STOR %s' % os.path.basename(filename), fp, 1024)
-            # os.remove(file_path)
-            # fp.close()
-
+            photo_pathname = default_storage.save(os.path.join(photo_path, photo.name), photo)
+            fp = open(photo_pathname, 'rb')
+            ftp.storbinary('STOR %s' % os.path.basename(photo.name), fp, 1024)
+            fp.close()
+            os.remove(photo_pathname)
+        os.rmdir(photo_path)
     return JsonResponse(id, safe=False)
 
 
