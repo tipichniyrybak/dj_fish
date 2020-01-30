@@ -19,7 +19,7 @@ class YandexMap {
             type: "POST",
             url: "/get_place_info/",
             data: {
-                'place_id': place_id 
+                'place_id': place_id
             },
 
             type: 'POST',
@@ -39,7 +39,11 @@ class YandexMap {
                 console.log(photo_names);
                 var photosHTML = '<b>Place photos:</b> <br> ';
                 photo_names.forEach(function(photo_name) {
-                    photosHTML = photosHTML + '<img src="/static/img/tmp_places_photo/' + photo_name + '" />';
+                    {% load static %}
+
+                    <script type=text/javascript src="{% static 'js/libs/jquery341min.js' %}"></script>
+                    <script type=text/javascript src="{% static 'js/yamaps.js' %}"></script>
+                    photosHTML = photosHTML + '<img src="{% static 'tmp_img/libs/jquery341min.js' %}/static/img/tmp_places_photo/' + photo_name + '" />';
                 });
 
                 $("#photos").html(photosHTML);
