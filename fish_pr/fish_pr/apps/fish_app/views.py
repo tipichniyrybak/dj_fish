@@ -19,6 +19,9 @@ def index(request):
     places = FishingPlace.objects.order_by('-id')
     return render(request, 'fish_app/index.html', {'places': places})
 
+def login(request):
+    return render(request, 'fish_app/login.html')
+
 @csrf_exempt
 def get_places(request):
     places = FishingPlace.objects.values()
