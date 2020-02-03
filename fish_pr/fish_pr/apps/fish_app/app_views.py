@@ -16,23 +16,25 @@ from django.templatetags.static import static
 
 
 def index(request):
-    # places = FishingPlace.objects.order_by('-id')
-    return render(request, 'fish_app/index.html')
+    places = FishingPlace.objects.order_by('-id')
+    return render(request, 'fish_app/index.html', {'places': places})
 
 
-def login(request):
-    return render(request, 'fish_app/login.html')
-
-
-def registration(request):
-    return render(request, 'fish_app/registration.html')
-
+# def login(request):
+#     username = request.POST['login']
+#     password = request.POST['pass']
+#     if username == 'gena':
+#         print('gennnnnnadiy!')
+#     return render(request, 'fish_app/login.html')
+#
+#
+# def registration(request):
+#     return render(request, 'fish_app/regstration.html')
 
 @csrf_exempt
 def get_places(request):
     places = FishingPlace.objects.values()
     return JsonResponse(list(places), safe=False)
-
 
 @csrf_exempt
 def get_place_info(request):
@@ -41,8 +43,8 @@ def get_place_info(request):
     ftp = FTP()
     ftp.connect('ftpupload.net', 21)
     ftp.login('epiz_24989236', 'FIbPfZKy3F')
-    ftp_path = "/htdocs/media/img/places/" + str(place_id)
-    ftp.cwd(ftp_path)
+    FTP_path = "/htdocs/media/img/places/" + str(place_id)
+    ftp.cwd(FTP_path)
 
     tmp_path = os.path.join(settings.BASE_DIR, 'fish_pr', 'static', 'tmp_img', str(place_id))
 
@@ -58,7 +60,6 @@ def get_place_info(request):
 
     place = FishingPlace.objects.filter(id=place_id).values()
     return JsonResponse(list(place), safe=False)
-
 
 @csrf_exempt
 def add_place(request):
@@ -85,6 +86,7 @@ def add_place(request):
             os.remove(photo_pathname)
         os.rmdir(photo_path)
     return JsonResponse(id, safe=False)
+
 
 
 # def detail(request, place_id):

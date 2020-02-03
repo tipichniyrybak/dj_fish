@@ -1,5 +1,10 @@
 from django.db import models
 
+class Profile(models.Model):
+    name = models.CharField('Name of user', max_length=50)
+    surname = models.CharField('Surame of user', max_length=50)
+    photo = models.FileField(upload_to='static/img/profile')
+
 class FishingPlace(models.Model):
     name = models.CharField('Name of place', max_length=100)
     lant = models.DecimalField('Lant of place', max_digits=10, decimal_places=8)
