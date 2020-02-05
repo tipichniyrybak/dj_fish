@@ -15,21 +15,26 @@ from django.conf import settings
 from django.templatetags.static import static
 
 
-def index(request):
+def workspace(request):
     places = FishingPlace.objects.order_by('-id')
-    return render(request, 'fish_app/index.html', {'places': places})
+    return render(request, 'fish_app/workspace.html', {'places': places})
 
 
-def login(request):
-    username = request.POST['login']
-    password = request.POST['pass']
-    if username == 'gena':
-        print('gennnnnnadiy!')
-    return render(request, 'fish_app/login.html')
-#
-#
-# def registration(request):
-#     return render(request, 'fish_app/regstration.html')
+def index(request):
+    return render(request, 'fish_app/index.html')
+
+
+# def login(request):
+#     return 1
+#     username = request.POST['login']
+#     password = request.POST['pass']
+#     if username == 'gena':
+#         print('gennnnnnadiy!')
+#     return render(request, 'fish_app/login.html')
+
+
+def registration(request):
+    return render(request, 'fish_app/regstration.html')
 
 @csrf_exempt
 def get_places(request):
