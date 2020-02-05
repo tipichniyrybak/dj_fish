@@ -20,12 +20,12 @@ def index(request):
     return render(request, 'fish_app/index.html', {'places': places})
 
 
-# def login(request):
-#     username = request.POST['login']
-#     password = request.POST['pass']
-#     if username == 'gena':
-#         print('gennnnnnadiy!')
-#     return render(request, 'fish_app/login.html')
+def login(request):
+    username = request.POST['login']
+    password = request.POST['pass']
+    if username == 'gena':
+        print('gennnnnnadiy!')
+    return render(request, 'fish_app/login.html')
 #
 #
 # def registration(request):
