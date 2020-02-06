@@ -133,4 +133,5 @@ STATICFILES_DIRS = [
 ]
 
 APPEND_SLASH = True
-LOGIN_REDIRECT_URL = 'workspace'
+
+LOGIN_REDIRECT_URL = '/workspace'

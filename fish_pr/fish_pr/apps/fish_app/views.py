@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import FishingPlace, Order
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -12,26 +12,38 @@ import os
 from django.core.files.storage import default_storage
 from django.core.files.storage import FileSystemStorage, default_storage
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login as auth_login
 
 
-def workspace(request):
+
+def workspace(request, userID):
     places = FishingPlace.objects.order_by('-id')
-    return render(request, 'fish_app/workspace.html', {'places': places})
+    return render(request, 'fish_app/workspace.html', {'places': places}, {'userID': userID})
 
 
 def index(request):
     return render(request, 'fish_app/index.html')
 
 
-# def login(request):
+def login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('fish_app:workspace', userID="199")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'fish_app/login.html', {'form': form})
+        
+# @login_required
+# def logged_in(request):
+#     # return render_to_response('logged_in.html', context_instance=RequestContext(request))
+#     print('login: yes')
 #     return 1
-#     username = request.POST['login']
-#     password = request.POST['pass']
-#     if username == 'gena':
-#         print('gennnnnnadiy!')
-#     return render(request, 'fish_app/login.html')
-
 
 def registration(request):
     return render(request, 'fish_app/regstration.html')
