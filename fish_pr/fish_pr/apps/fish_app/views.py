@@ -18,10 +18,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login
 
 
-
-def workspace(request, userID):
-    places = FishingPlace.objects.order_by('-id')
-    return render(request, 'fish_app/workspace.html', {'places': places}, {'userID': userID})
+def workspace(request):
+    return render(request, 'fish_app/workspace.html')
 
 
 def index(request):
@@ -34,7 +32,7 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            return redirect('fish_app:workspace', userID="199")
+            return redirect('fish_app:workspace', args)
     else:
         form = AuthenticationForm()
     return render(request, 'fish_app/login.html', {'form': form})
