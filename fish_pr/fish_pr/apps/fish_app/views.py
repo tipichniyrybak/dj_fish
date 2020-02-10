@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import FishingPlace, Order
+from django.contrib.auth.models import User
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,7 +20,9 @@ from django.contrib.auth import login as auth_login
 
 
 def workspace(request):
-    return render(request, 'fish_app/workspace.html')
+    userID = request.session['userID']
+
+    return render(request, 'fish_app/workspace.html', {'userID': userID})
 
 
 def index(request):
@@ -31,8 +34,10 @@ def login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            userID = User.objects.get(username=user).id
             auth_login(request, user)
-            return redirect('fish_app:workspace', args)
+            request.session['userID'] = userID
+            return redirect('fish_app:workspace')
     else:
         form = AuthenticationForm()
     return render(request, 'fish_app/login.html', {'form': form})

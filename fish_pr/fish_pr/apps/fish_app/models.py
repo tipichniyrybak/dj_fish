@@ -1,9 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 
 class Profile(models.Model):
-    name = models.CharField('Name of user', max_length=50)
-    surname = models.CharField('Surame of user', max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     photo = models.FileField(upload_to='static/img/profile')
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
 
 class FishingPlace(models.Model):
     name = models.CharField('Name of place', max_length=100)
