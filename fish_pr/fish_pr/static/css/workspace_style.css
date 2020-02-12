@@ -1,6 +1,6 @@
 .content-container {
     display: grid;
-    grid-template-columns: 0.5fr 3.5fr 1fr;
+    grid-template-columns: 1fr 3.5fr 0.5fr;
     grid-template-rows: 1fr;
     grid-column-gap: 1px;
     grid-row-gap: 1px;
@@ -12,4 +12,9 @@
 
 .filters {
     margin-left: 25px;
+}
+
+.img_resize {
+    width: 250px;
+    height: auto;
 }

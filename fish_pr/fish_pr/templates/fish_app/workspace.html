@@ -18,13 +18,45 @@
         var myYandexMap = null;
 
         $(document).ready(function() {
+
+            $(document).ajaxSend(function (event, jqxhr, settings) {
+                jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            });
+
+            $.ajax({
+                url: '/get_profile_info/',
+                type: 'POST',
+                data:{
+                    'userID': {{ userID }},
+                },
+                success: function(response){
+                    console.log(response);
+                    $("#first_name").html(response[0]['first_name']);
+                    $("#last_name").html(response[0]['last_name']);
+                    if (response[0]['is_professional'] == true) {
+                        $("#is_professional").html('<Профессионал>');
+                    } else {
+                        $("#is_professional").html('<Любитель>');
+                    }
+                    $("#home_pond").html('<b>Домашний водоем:</b> ' + response[0]['home_pond']);
+                    $("#lovely_pond").html('<b>Любимый водоем:</b> ' + response[0]['lovely_pond']);
+                    $("#fishing_object").html('<b>Любимый объект ловли:</b> ' + response[0]['fishing_object']);
+                    $("#tackle").html('<b>Любимая снасть:</b> ' + response[0]['tackle']);
+                    $("#fishing_style").html('<b>Любимый стиль ловли:</b> ' + response[0]['fishing_style']);
+                    usrid = {{ userID }}
+
+                    $("#profile_photo").html('<img class="img_resize" src="fish_pr/static/img/profile/userID' + usrid + '.jpg"/>');
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+
             myYandexMap = new YandexMap()
             myYandexMap.set_places();
             console.log('1 map:  ');
             console.log(myYandexMap);
-            $(document).ajaxSend(function (event, jqxhr, settings) {
-                jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-            });
+
 
 
 
@@ -116,31 +148,44 @@
 
     <div class="content-container">
         <div class="profile">
-            <input type="button" id="openAddPlaseFormID" value="Add place" name="Add place">
-            <br>
-            {{ userID }}
+            <div id="profile_photo">
+
+            </div>  <br>
+            <div id="name">
+                <div id="first_name">Иван</div> <div id="last_name">Иванов</div>
+            </div>  <br>
+            <div id="is_professional">
+                [yes/no]
+            </div>  <br>
+            <div id="home_pond">
+                Домашний водоем
+            </div>  <br>
+            <div id="lovely_pond">
+                Любимый водоем
+            </div>  <br>
+            <div id="fishing_object">
+                Любимый объект ловли
+            </div>  <br>
+            <div id="tackle">
+                Любимая снасть
+            </div>  <br>
+            <div id="fishing_style">
+                Любимый стиль ловли
+            </div>  <br>
+            <div id="controls">
+                <a href="#">Мои рыбалки</a> <br>
+                <a href="#">Трофеи</a> <br>
+                <a href="#">Добавить рыбалку</a> <br>
+                <a href="#">Мои отчеты</a> <br>
+                <a href="#">Мои объявления</a> <br>
+            </div>
+            <!-- <input type="button" id="openAddPlaseFormID" value="Add place" name="Add place"> -->
         </div>
         <div class="map">
             <div id="map" style="margin:auto; width: 100%; height: 80vh"></div>
         </div>
         <div class="filters" id="divcontentID">
-            <!-- <div id="base_name">
-                ...Place Name...
-            </div>  <br>
-            <div id="coord">
-                <div id="lant">00.00000</div>
-                <br>
-                <div id="long">00.00000</div>
-            </div>  <br>
-            <div id="photos">
-                photos
-            </div>  <br>
-            <div id="decription">
-                Decription Text
-            </div>  <br>
-            <div id="orders">
-                /Orders list/
-            </div> -->
+
             filters
         </div>
     </div>

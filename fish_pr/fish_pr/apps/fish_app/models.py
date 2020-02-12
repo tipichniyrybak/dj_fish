@@ -1,21 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
 import os
 
 def get_path_to_save_profile_photo(instance, filename):
-    path = 'fish_pr/static/img/profile'
-    userID = instance.user.id
-    path = os.path.join(path, str(userID), filename)
+    path = 'fish_pr/static/img/profile/'
+    extension = os.path.splitext(filename)[1]
+    file_name = 'userID' + str(instance.user.id) + extension
+    path = os.path.join(path, file_name)
     return path
 
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
     photo = models.FileField(upload_to=get_path_to_save_profile_photo)
-    firstname = models.CharField('Name profile', max_length=50)
-    lastname = models.CharField('Lastname profile', max_length=50)
+    first_name = models.CharField('Name profile', max_length=50)
+    last_name = models.CharField('Lastname profile', max_length=50)
     is_professional = models.BooleanField(default=False)
     home_pond = models.CharField('Home pond', max_length=70)
     lovely_pond = models.CharField('Lovely pond', max_length=70)

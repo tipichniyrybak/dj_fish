@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import FishingPlace, Order
+from .models import FishingPlace, Order, Profile
 from django.contrib.auth.models import User
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -41,20 +41,17 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'fish_app/login.html', {'form': form})
-        
-# @login_required
-# def logged_in(request):
-#     # return render_to_response('logged_in.html', context_instance=RequestContext(request))
-#     print('login: yes')
-#     return 1
+
 
 def registration(request):
     return render(request, 'fish_app/regstration.html')
+
 
 @csrf_exempt
 def get_places(request):
     places = FishingPlace.objects.values()
     return JsonResponse(list(places), safe=False)
+
 
 @csrf_exempt
 def get_place_info(request):
@@ -80,6 +77,14 @@ def get_place_info(request):
 
     place = FishingPlace.objects.filter(id=place_id).values()
     return JsonResponse(list(place), safe=False)
+
+
+@csrf_exempt
+def get_profile_info(request):
+    user_id = request.POST.get("userID")
+    user_by_id = User.objects.get(id=user_id)
+    profile = Profile.objects.filter(user=user_by_id).values()
+    return JsonResponse(list(profile), safe=False)
 
 @csrf_exempt
 def add_place(request):
