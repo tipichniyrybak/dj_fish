@@ -23,34 +23,36 @@
                 jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
             });
 
-            $.ajax({
-                url: '/get_profile_info/',
-                type: 'POST',
-                data:{
-                    'userID': {{ userID }},
-                },
-                success: function(response){
-                    console.log(response);
-                    $("#first_name").html(response[0]['first_name']);
-                    $("#last_name").html(response[0]['last_name']);
-                    if (response[0]['is_professional'] == true) {
-                        $("#is_professional").html('<Профессионал>');
-                    } else {
-                        $("#is_professional").html('<Любитель>');
-                    }
-                    $("#home_pond").html('<b>Домашний водоем:</b> ' + response[0]['home_pond']);
-                    $("#lovely_pond").html('<b>Любимый водоем:</b> ' + response[0]['lovely_pond']);
-                    $("#fishing_object").html('<b>Любимый объект ловли:</b> ' + response[0]['fishing_object']);
-                    $("#tackle").html('<b>Любимая снасть:</b> ' + response[0]['tackle']);
-                    $("#fishing_style").html('<b>Любимый стиль ловли:</b> ' + response[0]['fishing_style']);
-                    usrid = {{ userID }}
+            console.log('{{ currentProfile }}');
 
-                    $("#profile_photo").html('<img class="img_resize" src="fish_pr/static/img/profile/userID' + usrid + '.jpg"/>');
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            });
+            // $.ajax({
+            //     url: '/get_profile_info/',
+            //     type: 'POST',
+            //     data:{
+            //         'userID': {{ userID }},
+            //     },
+            //     success: function(response){
+            //         console.log(response);
+            //         $("#first_name").html(response[0]['first_name']);
+            //         $("#last_name").html(response[0]['last_name']);
+            //         if (response[0]['is_professional'] == true) {
+            //             $("#is_professional").html('<Профессионал>');
+            //         } else {
+            //             $("#is_professional").html('<Любитель>');
+            //         }
+            //         $("#home_pond").html('<b>Домашний водоем:</b> ' + response[0]['home_pond']);
+            //         $("#lovely_pond").html('<b>Любимый водоем:</b> ' + response[0]['lovely_pond']);
+            //         $("#fishing_object").html('<b>Любимый объект ловли:</b> ' + response[0]['fishing_object']);
+            //         $("#tackle").html('<b>Любимая снасть:</b> ' + response[0]['tackle']);
+            //         $("#fishing_style").html('<b>Любимый стиль ловли:</b> ' + response[0]['fishing_style']);
+            //         usrid = {{ userID }}
+            //
+            //         $("#profile_photo").html('<img class="img_resize" src="{{ Profile.photo }}"/>');
+            //     },
+            //     error: function(error){
+            //         console.log(error);
+            //     }
+            // });
 
             myYandexMap = new YandexMap()
             myYandexMap.set_places();
@@ -147,12 +149,16 @@
 {% block content_area %}
 
     <div class="content-container">
+
         <div class="profile">
             <div id="profile_photo">
+                {% for prof in currentProfile %}
+                    {{ prof.fields }}
+                {% endfor %}
 
             </div>  <br>
             <div id="name">
-                <div id="first_name">Иван</div> <div id="last_name">Иванов</div>
+                <div id="first_name"></div> <div id="last_name">{{ currentProfile.last_name }}</div>
             </div>  <br>
             <div id="is_professional">
                 [yes/no]
