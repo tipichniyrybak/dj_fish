@@ -39,7 +39,7 @@ def login(request):
             serialized_obj = serializers.serialize('json', [profile])
             auth_login(request, user)
             request.session['userID'] = user_id
-            request.session['currentProfile'] = serialized_obj
+            request.session['currentProfile'] = profile
             return redirect('fish_app:workspace')
     else:
         form = AuthenticationForm()
