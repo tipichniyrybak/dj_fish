@@ -27,6 +27,8 @@ class Profile(models.Model):
         verbose_name_plural = 'Профили'
 
 
+
+
 class FishingPlace(models.Model):
     name = models.CharField('Name of place', max_length=100)
     lant = models.DecimalField('Lant of place', max_digits=10, decimal_places=8)

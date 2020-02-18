@@ -23,13 +23,18 @@
                 jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
             });
 
-            console.log('{{ currentProfile }}');
+
+
+            var currentProfile = JSON.parse("{{ currentProfile }}");
+            console.log('current profile:');
+            console.log(currentProfile);
+
 
             // $.ajax({
             //     url: '/get_profile_info/',
             //     type: 'POST',
             //     data:{
-            //         'userID': {{ userID }},
+                    // 'userID': {{ userID }},
             //     },
             //     success: function(response){
             //         console.log(response);
@@ -152,9 +157,7 @@
 
         <div class="profile">
             <div id="profile_photo">
-                {% for prof in currentProfile %}
-                    {{ prof.fields }}
-                {% endfor %}
+
 
             </div>  <br>
             <div id="name">

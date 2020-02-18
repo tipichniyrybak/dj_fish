@@ -21,8 +21,8 @@ from django.contrib.auth import login as auth_login
 
 def workspace(request):
     user_id = request.session['userID']
-    profile = request.session['currentProfile']
-    return render(request, 'fish_app/workspace.html', {'currentProfile': profile})
+    cur_profile = request.session['currentProfile']
+    return render(request, 'fish_app/workspace.html', {'currentProfile': cur_profile})
 
 
 def index(request):
@@ -36,10 +36,10 @@ def login(request):
             user = form.get_user()
             user_id = User.objects.get(username=user).id
             profile = Profile.objects.get(user_id=user_id)
-            serialized_obj = serializers.serialize('json', [profile])
+            serialized_obj = serializers.serialize('json', [profile.first_name])
             auth_login(request, user)
             request.session['userID'] = user_id
-            request.session['currentProfile'] = profile
+            request.session['currentProfile'] = serialized_obj
             return redirect('fish_app:workspace')
     else:
         form = AuthenticationForm()
