@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login
+import json
 
 
 def workspace(request):
@@ -35,11 +36,13 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             user_id = User.objects.get(username=user).id
-            profile = Profile.objects.get(user_id=user_id)
-            serialized_obj = serializers.serialize('json', [profile.first_name])
+            profile = Profile.objects.filter(user_id=user_id).values()
+            profile_json = json.dumps(list(profile))
+            # serialized_obj = serializers.serialize('json', [profile])
+            # profile_json = json.dumps("data": profile)
             auth_login(request, user)
             request.session['userID'] = user_id
-            request.session['currentProfile'] = serialized_obj
+            request.session['currentProfile'] = profile_json
             return redirect('fish_app:workspace')
     else:
         form = AuthenticationForm()

@@ -3,6 +3,7 @@
 {% block css_link %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/workspace_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form_style.css' %}">
 {% endblock %}
 
 {% block js_link %}
@@ -15,6 +16,14 @@
 {% block js_script %}
     <script type="text/javascript">
 
+    function openForm() {
+        document.getElementById("popupForm").style.display="block";
+    }
+
+    function closeForm() {
+        document.getElementById("popupForm").style.display="none";
+    }
+
         var myYandexMap = null;
 
         $(document).ready(function() {
@@ -23,49 +32,31 @@
                 jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
             });
 
+            var currProfile_json = jQuery.parseJSON('{{ currentProfile }}'.replace(/&quot;/gi, '\"'));
+            console.log('current profile json:');
+            console.log(currProfile_json);
+
+            $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
+            // $("#last_name").html(currProfile_json[0].last_name);
+            if (currProfile_json[0].is_professional) {
+                $("#is_professional").html('<em>Профессионал</em>');
+            } else {
+                $("#is_professional").html('<em>Любитель</em>');
+            }
+            $("#home_pond").html('<b><em>Домашний водоем: </b>' + currProfile_json[0].home_pond + '</em>');
+            $("#lovely_pond").html('<b><em>Любимый водоем: </b>' + currProfile_json[0].lovely_pond + '</em>');
+            $("#fishing_object").html('<b><em>Любимый объект ловли: </b>' + currProfile_json[0].fishing_object + '</em>');
+            $("#tackle").html('<b><em>Любимая снасть: </b>' + currProfile_json[0].tackle + '</em>');
+            $("#fishing_style").html('<b><em>Любимый стиль ловли: </b>' + currProfile_json[0].fishing_style + '</em>');
 
 
-            var currentProfile = JSON.parse("{{ currentProfile }}");
-            console.log('current profile:');
-            console.log(currentProfile);
-
-
-            // $.ajax({
-            //     url: '/get_profile_info/',
-            //     type: 'POST',
-            //     data:{
-                    // 'userID': {{ userID }},
-            //     },
-            //     success: function(response){
-            //         console.log(response);
-            //         $("#first_name").html(response[0]['first_name']);
-            //         $("#last_name").html(response[0]['last_name']);
-            //         if (response[0]['is_professional'] == true) {
-            //             $("#is_professional").html('<Профессионал>');
-            //         } else {
-            //             $("#is_professional").html('<Любитель>');
-            //         }
-            //         $("#home_pond").html('<b>Домашний водоем:</b> ' + response[0]['home_pond']);
-            //         $("#lovely_pond").html('<b>Любимый водоем:</b> ' + response[0]['lovely_pond']);
-            //         $("#fishing_object").html('<b>Любимый объект ловли:</b> ' + response[0]['fishing_object']);
-            //         $("#tackle").html('<b>Любимая снасть:</b> ' + response[0]['tackle']);
-            //         $("#fishing_style").html('<b>Любимый стиль ловли:</b> ' + response[0]['fishing_style']);
-            //         usrid = {{ userID }}
-            //
-            //         $("#profile_photo").html('<img class="img_resize" src="{{ Profile.photo }}"/>');
-            //     },
-            //     error: function(error){
-            //         console.log(error);
-            //     }
-            // });
+            console.log('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
+            $("#profile_photo").html('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
 
             myYandexMap = new YandexMap()
             myYandexMap.set_places();
             console.log('1 map:  ');
             console.log(myYandexMap);
-
-
-
 
             $('#openAddPlaseFormID').click(function(e){
                 e.preventDefault();
@@ -157,30 +148,31 @@
 
         <div class="profile">
             <div id="profile_photo">
-
-
             </div>  <br>
+
+            <a href="javascript:openForm();">Редактировать профиль</a> <br>
+
             <div id="name">
-                <div id="first_name">{{ currentProfile }}</div> <div id="last_name">{{ currentProfile.first_name }}</div>
+                Паша Вислов
             </div>  <br>
             <div id="is_professional">
                 [yes/no]
             </div>  <br>
             <div id="home_pond">
                 Домашний водоем
-            </div>  <br>
+            </div>
             <div id="lovely_pond">
                 Любимый водоем
-            </div>  <br>
+            </div>
             <div id="fishing_object">
                 Любимый объект ловли
-            </div>  <br>
+            </div>
             <div id="tackle">
                 Любимая снасть
-            </div>  <br>
+            </div>
             <div id="fishing_style">
                 Любимый стиль ловли
-            </div>  <br>
+            </div> <br>
             <div id="controls">
                 <a href="#">Мои рыбалки</a> <br>
                 <a href="#">Трофеи</a> <br>
@@ -194,30 +186,25 @@
             <div id="map" style="margin:auto; width: 100%; height: 80vh"></div>
         </div>
         <div class="filters" id="divcontentID">
-
             filters
         </div>
     </div>
 
-                <!-- Modal content -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-              <span id="closeAddPlaceFormID" class="close">&times;</span>
-              <h2>Add place</h2>
-            </div>
-        <div class="modal-body">
-            <form enctype="multipart/form-data" method="post" name="add_plase_form" id="add_plase_formID" role="form">
-                {% csrf_token %}
-                <p>Название базы: <input type="text" id="place_nameID" name="place_name" /></p>
-                <p>lant: <input type="text" id="lantID" name="lant"/></p>
-                <p>long: <input type="text" id="longID" name="long"/></p>
-                <p>descr: <input type="text" id="descriptionID" name="description"/></p>
-                <input type="file"  id="upload_imagesID" min="1" max="999" multiple="true" name="upload_images" />
-                <p><input type="button" value="Добавить место" id="confirmAddPlaseID" name="addplace" /></p>
-            </form>
-        </div>
-      </div>
-    </div>
+    <div class="form-popup" id="popupForm">
+        <form action="/action_page.php" class="form-container">
+            {% csrf_token %}
+            <p>Имя: <input type="text" id="place_nameID" name="profile_first_name" /></p>
+            <p>Фамилия: <input type="text" id="place_nameID" name="profile_last_name" /></p>
 
+            <p>Домашний водоем: <input type="text" id="profile_home_pondID" name="profile_home_pond" /></p>
+            <p>Любимый водоем: <input type="text" id="profile_lovely_pondID" name="profile_lovely_pond" /></p>
+            <p>Любимый объект ловли: <input type="text" id="profile_fishing_objectID" name="profile_fishing_object" /></p>
+            <p>Любимая снасть: <input type="text" id="profile_tackleID" name="profile_tackle" /></p>
+            <p>Любимый стиль ловли: <input type="text" id="profile_fishing_styleID" name="profile_fishing_style" /></p>
+
+            <input type="file"  id="profile_photoID" name="profile_photo" />
+            <input type="button" value="Изменить профиль" id="confirmAddPlaseID" name="addplace" />
+            <button type="button" class="btn cancel" onclick="closeForm()">Отмена</button>
+        </form>
+    </div>
 {% endblock %}
