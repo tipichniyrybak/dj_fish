@@ -11,130 +11,22 @@
     <script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?apikey=18f62a6d-77ff-4bb8-8f46-3b6d164fdf4d&lang=ru_RU"></script>
     <script type=text/javascript src="{% static 'js/libs/jquery341min.js' %}"></script>
     <script type=text/javascript src="{% static 'js/yamaps.js' %}"></script>
+    <script type=text/javascript src="{% static 'js/workspace.js' %}"></script>
 {% endblock %}
 
 {% block js_script %}
     <script type="text/javascript">
 
-    function openForm() {
-        document.getElementById("popupForm").style.display="block";
-    }
-
-    function closeForm() {
-        document.getElementById("popupForm").style.display="none";
-    }
-
         var myYandexMap = null;
+        var currProfile_json = "";
 
         $(document).ready(function() {
 
-            $(document).ajaxSend(function (event, jqxhr, settings) {
-                jqxhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-            });
-
-            var currProfile_json = jQuery.parseJSON('{{ currentProfile }}'.replace(/&quot;/gi, '\"'));
-            console.log('current profile json:');
-            console.log(currProfile_json);
-
-            $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
-            // $("#last_name").html(currProfile_json[0].last_name);
-            if (currProfile_json[0].is_professional) {
-                $("#is_professional").html('<em>Профессионал</em>');
-            } else {
-                $("#is_professional").html('<em>Любитель</em>');
-            }
-            $("#home_pond").html('<b><em>Домашний водоем: </b>' + currProfile_json[0].home_pond + '</em>');
-            $("#lovely_pond").html('<b><em>Любимый водоем: </b>' + currProfile_json[0].lovely_pond + '</em>');
-            $("#fishing_object").html('<b><em>Любимый объект ловли: </b>' + currProfile_json[0].fishing_object + '</em>');
-            $("#tackle").html('<b><em>Любимая снасть: </b>' + currProfile_json[0].tackle + '</em>');
-            $("#fishing_style").html('<b><em>Любимый стиль ловли: </b>' + currProfile_json[0].fishing_style + '</em>');
-
-
-            console.log('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
-            $("#profile_photo").html('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
+            currProfile_json = jQuery.parseJSON('{{ currentProfile }}'.replace(/&quot;/gi, '\"'));
+            reloadProfile(currProfile_json);
 
             myYandexMap = new YandexMap()
             myYandexMap.set_places();
-            console.log('1 map:  ');
-            console.log(myYandexMap);
-
-            $('#openAddPlaseFormID').click(function(e){
-                e.preventDefault();
-                console.log("openAddPlaseFormID");
-                var modal = document.getElementById("myModal");
-                modal.style.display = "block";
-                console.log('myYandexMap:  ');
-                console.log(myYandexMap);
-            });
-
-            $('#closeAddPlaceFormID').click(function(e){
-                e.preventDefault();
-                console.log("closeAddPlaceFormID");
-                var modal = document.getElementById("myModal");
-                modal.style.display = "none";
-                console.log('myYandexMap:  ');
-                console.log(myYandexMap);
-            });
-
-            $('#confirmAddPlaseID').click(function(e){
-                e.preventDefault();
-                console.log("confirmAddPlaseID");
-
-                var files = $('#upload_imagesID')[0].files;
-                var pPhotos ='';
-                console.log($('form').get(0));
-                formData = new FormData();
-                console.log($('#place_nameID').val());
-
-                formData.append('place_name', $('#place_nameID').val());
-                formData.append('place_lant', $('#lantID').val());
-                formData.append('place_long', $('#longID').val());
-                formData.append('place_description', $('#descriptionID').val());
-
-                for (let i = 0; i < files.length; i++) {
-                    let file = files[i];
-                    formData.append('files[]', file);
-                    pPhotos = pPhotos + file.name + '|';
-                    console.log('files name:' + file.name);
-                }
-                pPhotos = pPhotos.substring(0, pPhotos.length - 1);
-                formData.append('place_photos', pPhotos);
-                console.log(formData);
-
-                $.ajax({
-                    url: '/add_place/',
-                    type: 'POST',
-                    // data:{
-                    //     place_name: $('#place_nameID').val(),
-                    //     place_lant: $('#lantID').val(),
-                    //     place_long: $('#longID').val(),
-                    //     place_description: $('#descriptionID').val(),
-                    //     place_photos:pPhotos,
-                    //     files: files,
-                    // },
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-
-                    success: function(response){
-
-                        console.log(response);
-                        if (response == 0) {
-                            console.log('no!!!');
-                        } else {
-                            myYandexMap.set_places();
-                            myYandexMap.map.container.fitToViewport();
-                            document.getElementById("add_plase_formID").reset();
-                            var modal = document.getElementById("myModal");
-                            modal.style.display = "none";
-                        }
-                    },
-                    error: function(error){
-                        console.log(error);
-                    }
-                });
-            });
-
         });
     </script>
 {% endblock %}
@@ -148,13 +40,13 @@
 
         <div class="profile">
             <div id="profile_photo">
-            </div>  <br>
+            </div>
 
-            <a href="javascript:openForm();">Редактировать профиль</a> <br>
+            <a href="javascript:openForm(currProfile_json);">Редактировать профиль</a> <br>
 
             <div id="name">
                 Паша Вислов
-            </div>  <br>
+            </div>
             <div id="is_professional">
                 [yes/no]
             </div>  <br>
@@ -193,18 +85,19 @@
     <div class="form-popup" id="popupForm">
         <form action="/action_page.php" class="form-container">
             {% csrf_token %}
-            <p>Имя: <input type="text" id="place_nameID" name="profile_first_name" /></p>
-            <p>Фамилия: <input type="text" id="place_nameID" name="profile_last_name" /></p>
+            <p>Имя: <input type="text" id="form_first_nameID" name="form_first_name" /></p>
+            <p>Фамилия: <input type="text" id="form_last_nameID" name="form_last_name" /></p>
 
-            <p>Домашний водоем: <input type="text" id="profile_home_pondID" name="profile_home_pond" /></p>
-            <p>Любимый водоем: <input type="text" id="profile_lovely_pondID" name="profile_lovely_pond" /></p>
-            <p>Любимый объект ловли: <input type="text" id="profile_fishing_objectID" name="profile_fishing_object" /></p>
-            <p>Любимая снасть: <input type="text" id="profile_tackleID" name="profile_tackle" /></p>
-            <p>Любимый стиль ловли: <input type="text" id="profile_fishing_styleID" name="profile_fishing_style" /></p>
+            <p>Домашний водоем: <input type="text" id="form_home_pondID" name="form_home_pond" /></p>
+            <p>Любимый водоем: <input type="text" id="form_lovely_pondID" name="form_lovely_pond" /></p>
+            <p>Любимый объект ловли: <input type="text" id="form_fishing_objectID" name="form_fishing_object" /></p>
+            <p>Любимая снасть: <input type="text" id="form_tackleID" name="form_tackle" /></p>
+            <p>Любимый стиль ловли: <input type="text" id="form_fishing_styleID" name="form_fishing_style" /></p>
 
-            <input type="file"  id="profile_photoID" name="profile_photo" />
-            <input type="button" value="Изменить профиль" id="confirmAddPlaseID" name="addplace" />
-            <button type="button" class="btn cancel" onclick="closeForm()">Отмена</button>
+            <input type="file"  id="form_photoID" name="form_photo" />
+            <input type="button" value="Изменить профиль" onclick="changeProfile()" />
+            <input type="button" value="Отмена"  onclick="closeForm()" />
+
         </form>
     </div>
 {% endblock %}

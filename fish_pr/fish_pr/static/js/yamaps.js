@@ -39,7 +39,6 @@ class YandexMap {
                 console.log(photo_names);
                 var photosHTML = '<b>Place photos:</b> <br> ';
                 photo_names.forEach(function(photo_name) {
-
                     photosHTML = photosHTML + '<br>' + photo_name;
                 });
 
@@ -62,10 +61,6 @@ class YandexMap {
             success: function(response) {
                 console.log('response:  ');
                 console.log(response);
-                // var json_resp = jQuery.parseJSON(response)
-                //
-                // console.log('json_resp:');
-                // console.log(json_resp);
                 ymaps.ready(function () {
                     response.forEach(function(place) {
                         console.log(place['name']);
@@ -76,10 +71,7 @@ class YandexMap {
                         });
                         myPlacemark1.events.add(['click'],  function (e) {
                             console.log('click cluck');
-//                            document.getElementByID("divcontentID").innerHTML = element[1];
-
                             that.get_place_info(place['id']);
-
                         });
                         that.PlacemarkArray.push(myPlacemark1);
                         that.map.geoObjects.add(myPlacemark1);
