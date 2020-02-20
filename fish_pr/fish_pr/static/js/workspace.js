@@ -22,20 +22,36 @@ function getProfileInfo(userID){
 
 function reloadProfile(userID) {
 
-    currProfile_json = getProfileInfo(userID);    
+    $.ajax({
+        type: "POST",
+        url: "/get_profile_info/",
+        data: {
+            'userID': userID
+        },
+        success: function(currProfile_json) {
+            console.log('currProfile_json:  ');
+            console.log(currProfile_json);
+            
+            $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
+            if (currProfile_json[0].is_professional) {
+                $("#is_professional").html('<em>Профессионал</em>');
+            } else {
+                $("#is_professional").html('<em>Любитель</em>');
+            }
+            $("#home_pond").html('<b><em>Домашний водоем: </b>' + currProfile_json[0].home_pond + '</em>');
+            $("#lovely_pond").html('<b><em>Любимый водоем: </b>' + currProfile_json[0].lovely_pond + '</em>');
+            $("#fishing_object").html('<b><em>Любимый объект ловли: </b>' + currProfile_json[0].fishing_object + '</em>');
+            $("#tackle").html('<b><em>Любимая снасть: </b>' + currProfile_json[0].tackle + '</em>');
+            $("#fishing_style").html('<b><em>Любимый стиль ловли: </b>' + currProfile_json[0].fishing_style + '</em>');
+            $("#profile_photo").html('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
 
-    $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
-    if (currProfile_json[0].is_professional) {
-        $("#is_professional").html('<em>Профессионал</em>');
-    } else {
-        $("#is_professional").html('<em>Любитель</em>');
-    }
-    $("#home_pond").html('<b><em>Домашний водоем: </b>' + currProfile_json[0].home_pond + '</em>');
-    $("#lovely_pond").html('<b><em>Любимый водоем: </b>' + currProfile_json[0].lovely_pond + '</em>');
-    $("#fishing_object").html('<b><em>Любимый объект ловли: </b>' + currProfile_json[0].fishing_object + '</em>');
-    $("#tackle").html('<b><em>Любимая снасть: </b>' + currProfile_json[0].tackle + '</em>');
-    $("#fishing_style").html('<b><em>Любимый стиль ловли: </b>' + currProfile_json[0].fishing_style + '</em>');
-    $("#profile_photo").html('<img class="img_resize" src="/static/img/profile/' + currProfile_json[0].photo.replace(/^.*[\\\/]/, '') +  '"/>');
+        },
+        error: function(error) {
+            console.log('get_profile_info_error:');
+            console.log(error);
+        }
+    });
+
 }
 
 function openForm(currProfile_json) {
