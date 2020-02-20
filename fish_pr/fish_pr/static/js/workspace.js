@@ -1,7 +1,28 @@
 var myYandexMap = null;
 var currProfile_json = "";
 
-function reloadProfile(currProfile_json) {
+function getProfileInfo(userID){
+    $.ajax({
+        type: "POST",
+        url: "/get_profile_info/",
+        data: {
+            'userID': userID
+        },
+        success: function(response) {
+            console.log('response3:  ');
+            console.log(response);
+            return response;
+        },
+        error: function(error) {
+            console.log('get_profile_info_error:');
+            console.log(error);
+        }
+    });
+}
+
+function reloadProfile(userID) {
+
+    currProfile_json = getProfileInfo(userID);    
 
     $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
     if (currProfile_json[0].is_professional) {
@@ -38,8 +59,6 @@ function changeProfile() {
         data: {
             'place_id': place_id
         },
-
-        type: 'POST',
         success: function(response) {
             console.log('response2:  ');
             console.log(response);

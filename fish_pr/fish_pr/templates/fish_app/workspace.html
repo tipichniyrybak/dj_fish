@@ -19,10 +19,13 @@
 
         var myYandexMap = null;
         var currProfile_json = "";
+        var currUserID = null;
 
         $(document).ready(function() {
 
             currProfile_json = jQuery.parseJSON('{{ currentProfile }}'.replace(/&quot;/gi, '\"'));
+            currUserID = '{{ userID }}';
+            console.log(currUserID);
             reloadProfile(currProfile_json);
 
             myYandexMap = new YandexMap()

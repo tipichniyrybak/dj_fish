@@ -23,7 +23,7 @@ import json
 def workspace(request):
     user_id = request.session['userID']
     cur_profile = request.session['currentProfile']
-    return render(request, 'fish_app/workspace.html', {'currentProfile': cur_profile})
+    return render(request, 'fish_app/workspace.html', {'currentProfile': cur_profile, 'userID': user_id})
 
 
 def index(request):
