@@ -6,7 +6,7 @@ box-sizing: border-box;
 .form-popup {
 display: none;
 position: fixed;
-left: 46%;
+left: 45%;
 top:5%;
 transform: translate(-45%,5%);
 border: 2px solid #666;
