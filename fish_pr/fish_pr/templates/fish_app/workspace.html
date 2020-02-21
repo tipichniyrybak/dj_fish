@@ -26,7 +26,7 @@
             currProfile_json = jQuery.parseJSON('{{ currentProfile }}'.replace(/&quot;/gi, '\"'));
             currUserID = '{{ userID }}';
             console.log(currUserID);
-            reloadProfile(currProfile_json);
+            reloadProfile(currUserID);
 
             myYandexMap = new YandexMap()
             myYandexMap.set_places();
