@@ -31,7 +31,7 @@ function reloadProfile(userID) {
         success: function(currProfile_json) {
             console.log('currProfile_json:  ');
             console.log(currProfile_json);
-            
+
             $("#name").html('<em><h4>' + currProfile_json[0].first_name + ' ' +currProfile_json[0].last_name + '</h4></em>');
             if (currProfile_json[0].is_professional) {
                 $("#is_professional").html('<em>Профессионал</em>');
