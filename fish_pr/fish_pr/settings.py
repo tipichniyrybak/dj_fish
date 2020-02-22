@@ -27,7 +27,7 @@ SECRET_KEY = 'hk_#)4e-zv$=fsyqq6gk7(#bc8mv$)(!9bv8e9^vphgs6bl#e^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.200.244', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.200.244', '127.0.0.1', '.herokuapp.com']
 
 
 # Application definition
@@ -46,6 +46,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
