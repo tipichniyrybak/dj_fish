@@ -1,2 +1,3 @@
 # Project exclude paths
 /venv/
+/fish_pr/fish_pr/static/img/profile/
